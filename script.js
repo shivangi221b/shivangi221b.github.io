@@ -9,7 +9,7 @@
   // the inline script in <head> has already set this; kept in sync here
   var stored = null;
   try { stored = localStorage.getItem("theme"); } catch (e) {}
-  root.setAttribute("data-theme", stored === "light" ? "light" : "dark");
+  root.setAttribute("data-theme", stored === "dark" ? "dark" : "light");
 
   var toggle = document.getElementById("themeToggle");
   if (toggle) toggle.addEventListener("click", function () {

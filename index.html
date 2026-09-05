@@ -17,14 +17,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
 <script>
-  // Dark is the default. A saved choice from the toggle wins. Inline and above
-  // the stylesheet so the page never flashes light on load.
+  // Light is the default. A saved choice from the toggle wins. Inline and above
+  // the stylesheet so the page never flashes dark on load.
   (function () {
     try {
       var t = localStorage.getItem("theme");
-      document.documentElement.setAttribute("data-theme", t === "light" ? "light" : "dark");
+      document.documentElement.setAttribute("data-theme", t === "dark" ? "dark" : "light");
     } catch (e) {
-      document.documentElement.setAttribute("data-theme", "dark");
+      document.documentElement.setAttribute("data-theme", "light");
     }
   })();
 </script>
