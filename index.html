@@ -12,15 +12,27 @@
 <meta property="og:description" content="MS Computer Science at Columbia. Speech adaptation, agentic systems, ML infrastructure." />
 <meta property="og:url" content="https://shivangi221b.github.io/" />
 <meta name="twitter:card" content="summary_large_image" />
-<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%23B14A2A'/><text x='50' y='71' font-size='62' font-family='Georgia,serif' fill='%23FAF7F2' text-anchor='middle'>S</text></svg>" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%230666EE'/><text x='50' y='71' font-size='62' font-family='Georgia,serif' fill='%23F7FAFD' text-anchor='middle'>S</text></svg>" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<script>
+  // Dark is the default. A saved choice from the toggle wins. Inline and above
+  // the stylesheet so the page never flashes light on load.
+  (function () {
+    try {
+      var t = localStorage.getItem("theme");
+      document.documentElement.setAttribute("data-theme", t === "light" ? "light" : "dark");
+    } catch (e) {
+      document.documentElement.setAttribute("data-theme", "dark");
+    }
+  })();
+</script>
 <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-<canvas id="bg" aria-hidden="true"></canvas>
+<div class="progress" aria-hidden="true"><span id="progressBar"></span></div>
 <a class="skip" href="#work">Skip to work</a>
 
 <header class="nav" id="nav">
@@ -46,28 +58,26 @@
   <div class="wrap hero-grid">
     <div class="hero-text">
       <h1 class="display reveal">Shivangi Kumar</h1>
-      <p class="hero-role reveal">Machine learning and software engineer. MS Computer Science at Columbia.</p>
-
+      <p class="hero-role reveal">Machine Learning and Software Engineer </p>
       <div class="hero-body reveal">
         <p>
-          I am finishing a master's in computer science at Columbia on the AI/ML track,
-          graduating this December with a 4.0 GPA. Last summer I was a software engineer intern at Amazon,
+          I'm finishing my Master's in Computer Science at Columbia University on the AI/ML track,
+          graduating December 2026. This summer I was a software engineer intern at Amazon,
           shipping features across the Subscribe &amp; Save customer experience. Before that,
           three years at Goldman Sachs building trading and infrastructure systems.
         </p>
         <p>
-          I work between machine learning and the systems that run it: speech models that
+          I work between machine learning and the systems that run it. Speech models that
           keep improving after they ship, agents that reason across text and images, and the
           infrastructure holding both up.
         </p>
       </div>
 
       <p class="hero-interests reveal">
-        <span class="ilabel">Interested in</span>
         <span class="itags">
-          <span>speech &amp; audio ML</span>
-          <span>agentic &amp; multimodal systems</span>
-          <span>ML infrastructure at scale</span>
+          <span>Speech &amp; Audio ML</span>
+          <span>Agentic &amp; Multimodal Systems</span>
+          <span>ML Infrastructure at Scale</span>
         </span>
       </p>
 
@@ -103,14 +113,30 @@
   <div class="wrap">
     <div class="section-head reveal">
       <h2 class="section-title">Selected Work</h2>
-      <p class="section-sub">Research, production systems, and weekend builds.</p>
+      <p class="section-sub">Research, production systems, and weekend builds. Move through the constellation — hover a node to expand it.</p>
     </div>
-    <div class="filters reveal" id="filters" role="group" aria-label="Filter projects"></div>
-    <div class="pgrid" id="featuredProjects"></div>
-    <h3 class="subhead reveal">Also Built</h3>
-    <ul class="minilist" id="moreProjects"></ul>
+    <div class="workbar reveal">
+      <div class="filters" id="filters" role="group" aria-label="Filter projects"></div>
+      <div class="views" role="group" aria-label="Layout">
+        <button type="button" class="viewbtn active" id="viewMap" aria-pressed="true">Map</button>
+        <button type="button" class="viewbtn" id="viewList" aria-pressed="false">List</button>
+      </div>
+    </div>
+
+    <div class="pgmap reveal" id="mapView">
+      <svg class="pgedges" id="pgedges" aria-hidden="true"></svg>
+    </div>
+
+    <div id="listView" hidden>
+      <div class="pgrid" id="featuredProjects"></div>
+      <p class="pempty" id="projectsEmpty" hidden>Nothing under that filter yet.</p>
+      <h3 class="subhead" id="alsoBuiltHead">Also Built</h3>
+      <ul class="minilist" id="moreProjects"></ul>
+    </div>
   </div>
 </section>
+
+<div class="wavewrap" aria-hidden="true"><canvas class="wave"></canvas></div>
 
 <!-- ===================== WRITING ===================== -->
 <section id="writing" class="section section-alt">
@@ -119,6 +145,8 @@
     <div class="papers" id="papers"></div>
   </div>
 </section>
+
+<div class="wavewrap" aria-hidden="true"><canvas class="wave"></canvas></div>
 
 <!-- ===================== SKILLS ===================== -->
 <section id="skills" class="section skills">
@@ -150,7 +178,7 @@
 <footer class="footer" id="contact">
   <div class="wrap footer-inner">
     <div>
-      <p class="foot-line">Say hello.</p>
+      <p class="foot-line">Say hello!</p>
       <a class="foot-mail" href="mailto:sk5659@columbia.edu">sk5659@columbia.edu</a>
     </div>
     <div class="foot-links">
@@ -163,6 +191,7 @@
 </footer>
 
 <script src="data.js"></script>
+<script src="graph.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

@@ -8,12 +8,36 @@
      media: { type: "video", src: "assets/video/x.mp4" } to a project and
      re-enable the one commented line in card() inside script.js.
      tags     : become the filter chips. Keep the vocabulary small.
+     domain   : which cluster the card belongs to (see DOMAINS above)
+     pos      : where the node sits on the map. x is a percentage of the map
+                width, y is pixels from the top. Nodes are ~52px circles with
+                a short label underneath; on hover they expand with more detail.
+                Leave ~160px of vertical clearance between nodes in one column.
+     short    : the label printed under the node, keep it to two or three words
+     line     : the one-line version, shown when a node expands
    ============================================================ */
+
+/* Cluster labels on the project map.
+   lx is a percentage of the map width, ly is pixels from its top. */
+const DOMAINS = [
+  { key: "speech",   label: "Speech & Audio", lx: 8,  ly: 36 },
+  { key: "vision",   label: "Vision",         lx: 58, ly: 36 },
+  { key: "agents",   label: "Agents & LLMs",  lx: 34, ly: 250 },
+  { key: "graphnlp", label: "Graph & NLP",    lx: 4,  ly: 250 },
+  { key: "systems",  label: "Systems & Web",  lx: 44, ly: 490 }
+];
+
+/* How tall the map is, in pixels, on wide screens. */
+const MAP_HEIGHT = 720;
 
 const PROJECTS = [
   {
     title: "Adaptive Self-Learning Speech-to-Text",
     kicker: "Research · 2026",
+    domain: "speech",
+    pos: { x: 12, y: 110 },
+    short: "Self-Learning STT",
+    line: "Speech recognition that retrains itself, and only when the accuracy is worth the compute.",
     blurb:
       "A speech recognition system that keeps improving after it ships. Runtime corrections feed back into the training set, and a scheduler retrains only when the accuracy gain justifies the compute.",
     detail:
@@ -28,6 +52,10 @@ const PROJECTS = [
   {
     title: "ASR Fine-Tuning and RL Adaptation",
     kicker: "Research · Columbia · 2026",
+    domain: "speech",
+    pos: { x: 30, y: 110 },
+    short: "ASR + RL Adaptation",
+    line: "Two toolkits held to identical data and metrics, to see whether reward shaping really helps.",
     blurb:
       "A controlled comparison of domain adaptation for speech-to-text across two toolkits: supervised fine-tuning on clinical and parliamentary audio, then a reward-augmented second stage on top of CTC.",
     detail:
@@ -42,6 +70,10 @@ const PROJECTS = [
   {
     title: "Plant Disease Detection with Explainable AI",
     kicker: "Deep learning · Columbia · 2025",
+    domain: "vision",
+    pos: { x: 62, y: 110 },
+    short: "Plant Disease XAI",
+    line: "98.72% accuracy, with the evidence behind every diagnosis shown alongside it.",
     blurb:
       "Upload a photo of a leaf and get back a diagnosis, a heatmap of what the model looked at, and a treatment plan. EfficientNetB3 fine-tuned across 38 disease classes at 98.72% accuracy.",
     detail:
@@ -57,6 +89,10 @@ const PROJECTS = [
   {
     title: "AI Wardrobe Planner",
     kicker: "Startup Studio · Columbia · 2026",
+    domain: "vision",
+    pos: { x: 84, y: 110 },
+    short: "Wardrobe Planner",
+    line: "A video of your closet becomes an editable inventory, then an outfit for tomorrow.",
     blurb:
       "A wardrobe assistant that reads your calendar, your location and your closet, then tells you what to wear. Record a short video of the closet and a vision pipeline turns it into an inventory you can edit.",
     detail:
@@ -71,6 +107,10 @@ const PROJECTS = [
   {
     title: "NutriGraph",
     kicker: "Big Data & AI · Columbia · 2026",
+    domain: "agents",
+    pos: { x: 42, y: 330 },
+    short: "NutriGraph",
+    line: "An agent that reasons across nutrition data and images, and shows its working.",
     blurb:
       "An agentic multimodal RAG system for nutritional analysis. A LangChain ReAct agent plans across structured nutrition data and images, calls retrieval and search tools as it goes, and shows its reasoning in a Streamlit UI.",
     detail:
@@ -85,6 +125,10 @@ const PROJECTS = [
   {
     title: "Context-Aware Sarcasm Detection",
     kicker: "B.Tech thesis · IIT Guwahati · 2022",
+    domain: "graphnlp",
+    pos: { x: 14, y: 330 },
+    short: "Sarcasm Detection",
+    line: "Reads the author and the entities they tag, not just the sentence. 86.51%.",
     blurb:
       "Reads the author and the entities they tag as part of the signal, not just the sentence. 86.51% accuracy, ahead of the linguistic baselines it was measured against.",
     detail:
@@ -99,6 +143,10 @@ const PROJECTS = [
   {
     title: "Diffusion and Flow Matching",
     kicker: "COMS 4732 · Columbia",
+    domain: "vision",
+    pos: { x: 68, y: 330 },
+    short: "Diffusion & Flow",
+    line: "Diffusion sampling and flow matching built from scratch, UNet included.",
     blurb: "Diffusion sampling and editing with DeepFloyd, plus flow matching and a UNet written from scratch on MNIST. Results render inline in the README.",
     tags: ["Research", "Vision", "ML"],
     featured: false,
@@ -107,6 +155,10 @@ const PROJECTS = [
   {
     title: "Molecular ML with DeepChem",
     kicker: "EECS 6895 · Columbia",
+    domain: "graphnlp",
+    pos: { x: 18, y: 500 },
+    short: "Molecular ML",
+    line: "Graph networks over Tox21 toxicity and HIV activity prediction.",
     blurb: "Tox21 toxicity and HIV activity prediction with DeepChem, plus an AlphaGenome writeup. The notebook keeps every output plot intact.",
     tags: ["Research", "ML"],
     featured: false,
@@ -115,6 +167,10 @@ const PROJECTS = [
   {
     title: "xv6 Kernel Labs",
     kicker: "Operating Systems · IIT Guwahati",
+    domain: "systems",
+    pos: { x: 54, y: 530 },
+    short: "xv6 Kernel",
+    line: "Scheduling and system calls, at the layer underneath the standard library.",
     blurb: "Kernel work in C on xv6: scheduling, system calls and process management, built at the layer everything else sits on.",
     tags: ["Systems"],
     featured: false,
@@ -123,6 +179,10 @@ const PROJECTS = [
   {
     title: "TEDx IIT Guwahati portal",
     kicker: "Django · 2021",
+    domain: "systems",
+    pos: { x: 40, y: 620 },
+    short: "TEDx Portal",
+    line: "The site and booking system behind the campus's first virtual TEDx.",
     blurb: "The official web portal for TEDx IIT Guwahati, doubling as the talk scheduling and booking system for the campus's first virtual edition.",
     tags: ["Web"],
     featured: false,
@@ -131,6 +191,10 @@ const PROJECTS = [
   {
     title: "Habit Tracker",
     kicker: "Weekend build",
+    domain: "systems",
+    pos: { x: 72, y: 640 },
+    short: "Habit Tracker",
+    line: "A two-week calendar that points at the habit needing attention today.",
     blurb: "A single-page habit tracker that runs entirely in the browser. Tap days on a two-week calendar and it surfaces the habit that needs attention today.",
     tags: ["Web"],
     featured: false,

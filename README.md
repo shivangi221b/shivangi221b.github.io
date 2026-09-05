@@ -3,10 +3,11 @@
 Personal site. Static HTML/CSS/JS, no build step, no dependencies.
 
 ```
-index.html    structure and all the prose (hero, journey, off hours, contact)
-data.js       ← projects, timeline, and papers live here. Edit this most.
+index.html    structure and all the prose (hero, sections, footer)
+data.js       ← projects, clusters, skills, timeline, papers. Edit this most.
+graph.js      the project map: layout, edges, selection, the depth control
 styles.css    design tokens at the top; change --accent to reskin the whole site
-script.js     rendering, filters, theme toggle, scroll reveal
+script.js     list rendering, filters, view toggle, theme, motion, backgrounds
 assets/       videos, images, resume/PDFs (see assets/README.md)
 ```
 
@@ -123,6 +124,20 @@ drives the background graph, and one in the favicon data URI in `index.html`.
 **Reorder sections.** Move the `<section>` blocks in `index.html`. The nav
 links are anchors to their `id`s.
 
+**Edit the project map.** Each project needs `domain` (its cluster), `pos`
+(where the card sits: `x` is a percentage of the map width, `y` is pixels from
+the top), `short` and `line` (the one-sentence version shown before you scroll).
+Cards are 22% wide and 230px tall, so leave 250px of vertical clearance between
+two cards in the same column, and remember two cards collide when their x values
+are within about 22 of each other. `DOMAINS` holds the cluster labels and their
+positions; `MAP_HEIGHT` sets how tall the map is. Two projects are joined by a
+line when they share a cluster or a tag, and the `HAIRBALL` list in `graph.js`
+excludes tags that sit on nearly everything, which is why "ML" draws no edges.
+
+Each card scrolls: the title, the one-liner and the links sit above the fold,
+and `blurb`, `detail` and the stack are underneath. Below 1040px the map drops
+its positioning and the cards flow as an ordinary grid with the lines hidden.
+
 **Edit the core skills.** `CORE_SKILLS` in `data.js` is the static, highlighted
 row recruiters see first.
 
@@ -132,8 +147,23 @@ it is wider than the screen so the loop never shows a gap. Speeds are the
 `animation-duration` values on `.mtrack` in `styles.css`. Rows pause on hover
 and stop entirely for reduced-motion visitors.
 
+**Tune the motion.** Three pieces, all in `script.js`. The section numbers and
+the word-by-word titles are built in the "editorial furniture" block; change the
+`55` in `transitionDelay` for a faster or slower title stagger. Card tilt angles
+are the `3.4` and `5.0` in the `.pcard` mousemove handler; set both to 0 to turn
+tilt off and keep the light sweep. The waveform divider is its own block: `amp`
+rests around 7 and swells with scroll speed up to 30. Everything here is off for
+visitors with reduced motion enabled.
+
+**The page-wide graph background is off.** It clashed with the project map, so
+the `<canvas id="bg">` element was removed from `index.html`. The code that drew
+it is still at the bottom of `script.js` and simply exits when it cannot find
+the element, so putting that one line back in the body switches it on again.
+
 **Tune the background.** The graph constellation lives at the bottom of
 `script.js`. `LINK_DIST` controls how far apart two nodes can be and still
-draw an edge, `PULL_DIST` is the cursor's reach, and `density()` sets how many
-nodes there are. It turns itself off on touch devices, narrow screens, and for
+draw an edge, `PULL_DIST` is the cursor's reach, `MAX_OFFSET` caps how far a node
+may travel from home (this is what stops it collapsing into a knot), and
+`density()` sets how many nodes there are. Raise `LINK_DIST` or `density()` for a
+busier web; the alpha values in `step()` control how visible it is. It turns itself off on touch devices, narrow screens, and for
 anyone with reduced motion enabled.
