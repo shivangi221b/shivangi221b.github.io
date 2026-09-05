@@ -1,195 +1,244 @@
 /* ============================================================
-   data.js — everything you'll want to edit lives in this file.
+   data.js  -  everything you will want to edit lives here.
 
    PROJECTS
-     featured : true  -> big card with a media slot, near the top
-     media    : { type: "video",   src: "assets/video/foo.mp4",
-                  poster: "assets/img/foo.jpg" }        // local file
-              | { type: "youtube", id: "dQw4w9WgXcQ" }  // YouTube embed
-              | { type: "image",   src: "assets/img/foo.png" }
-              | null                                    // draws a nice gradient
-     links    : any number of { label, href }
-     tags     : used for the filter chips
+     featured : true  -> a card in the main grid
+                false -> a row in the compact "Also built" list
+     Cards are text only right now. To bring the media slot back, add
+     media: { type: "video", src: "assets/video/x.mp4" } to a project and
+     re-enable the one commented line in card() inside script.js.
+     tags     : become the filter chips. Keep the vocabulary small.
    ============================================================ */
 
 const PROJECTS = [
   {
-    title: "ASR Fine-Tuning & RL Adaptation",
-    kicker: "Research · Columbia · 2026",
+    title: "Adaptive Self-Learning Speech-to-Text",
+    kicker: "Research · 2026",
     blurb:
-      "A cross-framework study of domain adaptation for speech-to-text. I ran supervised fine-tuning on clinical (AfriSpeech-200) and parliamentary (VoxPopuli) audio, then added a second reward-augmented stage on top of CTC using WER, domain-weighted WER, and an LLM-based scorer as the reward signal.",
+      "A speech recognition system that keeps improving after it ships. Runtime corrections feed back into the training set, and a scheduler retrains only when the accuracy gain justifies the compute.",
     detail:
-      "The interesting question wasn't whether reward shaping helps — it's whether it helps <em>consistently</em>, across toolkits, and at what cost. So NeMo and ESPnet get identical datasets, metrics, and reward designs, and every run reports the catastrophic-forgetting delta on LibriSpeech alongside the domain gains. Trained on GCP GPUs; artifacts and configs are checkpointed to GCS so nothing dies with the VM.",
+      "Word error rate falls from 20.44% to 17.25% on the Edinburgh noisy speech set, at 40 to 60% less retraining cost than fixed-interval schedules. Error detection runs at 0.85 to 0.92 precision, a Llama 3.2 3B correction step lands 80 to 90% of the time, and LoRA holds trainable parameters to 40% of the full model.",
     tags: ["Research", "Speech", "ML"],
-    stack: ["NVIDIA NeMo", "ESPnet", "CTC", "Gemini", "GCP"],
+    stack: ["Wav2Vec2", "Llama 3.2", "LoRA", "PyTorch"],
     featured: true,
-    media: null, // TODO: add a demo/poster, e.g. { type: "image", src: "assets/img/asr-results.png" }
     links: [
-      { label: "GitHub", href: "https://github.com/shivangi221b/ASR-Fine-Tuning-Modules-and-RL-Adaptation-Analysis" }
-      // TODO: add { label: "Paper (PDF)", href: "assets/docs/asr-paper.pdf" } when public
+      { label: "Google Scholar", href: "https://scholar.google.com/citations?user=40wdomcAAAAJ&hl=en" }
     ]
   },
   {
-    title: "NutriGraph",
-    kicker: "Big Data & AI · Columbia",
+    title: "ASR Fine-Tuning and RL Adaptation",
+    kicker: "Research · Columbia · 2026",
     blurb:
-      "An agentic multimodal RAG system for nutritional analysis. A LangChain ReAct agent plans over a mix of structured nutrition data and images, calls retrieval and search tools as it needs them, and explains what it concluded — wrapped in a Streamlit UI you can actually poke at.",
+      "A controlled comparison of domain adaptation for speech-to-text across two toolkits: supervised fine-tuning on clinical and parliamentary audio, then a reward-augmented second stage on top of CTC.",
     detail:
-      "Most of the real work was in the failure modes: callback handlers that swallowed tool errors, prompt templates that silently truncated, and search output that the agent confidently misread. Written up as a four-page ACM-format report with the team.",
-    tags: ["LLM & Agents", "ML"],
-    stack: ["LangChain", "ReAct", "Streamlit", "Vector search"],
+      "Rewards come from word error rate, domain-weighted WER, or an LLM scorer. NeMo and ESPnet run identical data, metrics and reward designs so the comparison holds. Every run reports domain gains, the LibriSpeech retention delta, and cost in GPU-hours. Trained on GCP with checkpoints written to GCS.",
+    tags: ["Research", "Speech", "ML"],
+    stack: ["NVIDIA NeMo", "ESPnet", "CTC", "Gemini", "GCP"],
     featured: true,
-    media: null, // TODO: your NutriGraph demo video -> { type: "video", src: "assets/video/nutrigraph.mp4" }
     links: [
-      // TODO: add the repo + the ACM report PDF
-      { label: "Report (PDF)", href: "assets/docs/nutrigraph-report.pdf" }
+      { label: "GitHub", href: "https://github.com/shivangi221b/ASR-Fine-Tuning-Modules-and-RL-Adaptation-Analysis" }
     ]
   },
   {
     title: "Plant Disease Detection with Explainable AI",
-    kicker: "Deep Learning · Columbia",
+    kicker: "Deep learning · Columbia · 2025",
     blurb:
-      "A fine-tuned EfficientNetB3 that classifies 38 plant leaf diseases at 98.72% accuracy — and, more usefully, shows its work. Grad-CAM and LIME produce both image and text explanations, and a swappable LLM backend turns the diagnosis into an actual treatment recommendation.",
+      "Upload a photo of a leaf and get back a diagnosis, a heatmap of what the model looked at, and a treatment plan. EfficientNetB3 fine-tuned across 38 disease classes at 98.72% accuracy.",
     detail:
-      "The LLM layer runs against Gemini 2.5 Flash in the cloud or Llama 2 / Mistral locally through Ollama, so the whole thing works offline if you want it to. Ships as a single standalone Python file with a Streamlit front end — no separate API service to stand up.",
+      "Grad-CAM and LIME sit beside every prediction and produce both image and text explanations, so a grower can see the evidence behind a diagnosis. The treatment layer runs on Gemini 2.5 Flash in the cloud or Llama 2 and Mistral locally through Ollama, so it works on a laptop in a field. One standalone Python file, Streamlit front end.",
     tags: ["Vision", "LLM & Agents", "ML"],
     stack: ["EfficientNetB3", "Grad-CAM", "LIME", "Streamlit", "Ollama"],
     featured: true,
-    // The presentation video already lives in the repo — copy it into assets/video/ to embed it here.
-    media: null, // TODO: { type: "video", src: "assets/video/plant-disease-demo.mp4" }
     links: [
       { label: "GitHub", href: "https://github.com/shivangi221b/Plant-Disease-Detection-with-Explainable-AI" },
-      { label: "Presentation video", href: "https://github.com/shivangi221b/Plant-Disease-Detection-with-Explainable-AI/blob/main/group_presentation_video.mp4" }
+      { label: "Demo video", href: "https://github.com/shivangi221b/Plant-Disease-Detection-with-Explainable-AI/blob/main/group_presentation_video.mp4" }
     ]
   },
   {
     title: "AI Wardrobe Planner",
     kicker: "Startup Studio · Columbia · 2026",
     blurb:
-      "A wardrobe assistant that reads your calendar, your location, and your actual closet, then tells you what to wear. You upload a short video of your closet; a vision pipeline turns it into a structured inventory you can edit.",
+      "A wardrobe assistant that reads your calendar, your location and your closet, then tells you what to wear. Record a short video of the closet and a vision pipeline turns it into an inventory you can edit.",
     detail:
-      "I worked on the onboarding flow and the ingestion path. The vision worker runs YOLOv8 for detection, EfficientSAM for segmentation, and CLIP for attribute tagging as a separate service behind a FastAPI + Postgres backend, so slow media processing never blocks the app. Built with a team of seven in Columbia's Startup Studio.",
+      "I built the onboarding flow and the media ingestion path. The vision worker runs YOLOv8 for detection, EfficientSAM for segmentation and CLIP for attribute tagging as its own service behind a FastAPI and Postgres backend, so media processing stays off the request path. Team of seven.",
     tags: ["Vision", "Full-stack"],
     stack: ["FastAPI", "PostgreSQL", "YOLOv8", "EfficientSAM", "CLIP", "TypeScript"],
     featured: true,
-    media: null, // TODO: { type: "youtube", id: "..." } or a screen recording
     links: [
       { label: "GitHub", href: "https://github.com/shivangi221b/AI_Wardrobe_Planner" }
     ]
   },
-
-  /* ---------- smaller / older work ---------- */
   {
-    title: "Habit Tracker",
-    kicker: "Weekend build",
+    title: "NutriGraph",
+    kicker: "Big Data & AI · Columbia · 2026",
     blurb:
-      "A single-page habit tracker with no backend at all. Add habits, tap days on a two-week calendar, and it tells you which one you've been quietly neglecting.",
-    tags: ["Web"],
-    stack: ["Vanilla JS"],
-    featured: false,
-    media: null,
-    links: [{ label: "GitHub", href: "https://github.com/shivangi221b/habit-tracker" }]
-  },
-  {
-    title: "TEDxIITGuwahati",
-    kicker: "IIT Guwahati",
-    blurb:
-      "Website and tooling for the TEDx chapter at IIT Guwahati — built and shipped against a hard, non-negotiable deadline: the event itself.",
-    tags: ["Web"],
-    stack: ["Python"],
-    featured: false,
-    media: null,
-    links: [{ label: "GitHub", href: "https://github.com/shivangi221b/TEDxIITGuwahati" }]
-  },
-  {
-    title: "xv6 Kernel Labs",
-    kicker: "Operating Systems · IIT Guwahati",
-    blurb:
-      "Extending the xv6 teaching kernel in C — scheduling, system calls, and the particular humility that comes from debugging code with no printf.",
-    tags: ["Systems"],
-    stack: ["C", "xv6"],
-    featured: false,
-    media: null,
+      "An agentic multimodal RAG system for nutritional analysis. A LangChain ReAct agent plans across structured nutrition data and images, calls retrieval and search tools as it goes, and shows its reasoning in a Streamlit UI.",
+    detail:
+      "Getting an agent to be reliable is mostly plumbing: surfacing tool errors through the callback handler, keeping prompt templates inside the context window, and normalising search output so the agent reads it the same way every time. Written up as a four-page ACM-format report.",
+    tags: ["LLM & Agents", "ML"],
+    stack: ["LangChain", "ReAct", "Streamlit"],
+    featured: true,
     links: [
-      { label: "xv6", href: "https://github.com/shivangi221b/xv6" },
-      { label: "Lab 3", href: "https://github.com/shivangi221b/xv6lab3" }
+      { label: "Report (PDF)", href: "assets/docs/nutrigraph-report.pdf" } // TODO: add repo + PDF
     ]
   },
   {
-    title: "Diffusion & Flow Matching",
-    kicker: "COMS 4732 · Columbia",
+    title: "Context-Aware Sarcasm Detection",
+    kicker: "B.Tech thesis · IIT Guwahati · 2022",
     blurb:
-      "Implementing diffusion models and flow matching from scratch on MNIST, including a UNet built and debugged the hard way.",
+      "Reads the author and the entities they tag as part of the signal, not just the sentence. 86.51% accuracy, ahead of the linguistic baselines it was measured against.",
+    detail:
+      "A relational graph convolutional network runs over a social network graph carrying both linguistic and relational edges, combining contextual embeddings, feature attention and graph message passing.",
+    tags: ["Research", "ML"],
+    stack: ["RGCN", "PyTorch", "NLP"],
+    featured: true,
+    links: []
+  },
+
+  /* ---------- compact list ---------- */
+  {
+    title: "Diffusion and Flow Matching",
+    kicker: "COMS 4732 · Columbia",
+    blurb: "Diffusion sampling and editing with DeepFloyd, plus flow matching and a UNet written from scratch on MNIST. Results render inline in the README.",
     tags: ["Research", "Vision", "ML"],
-    stack: ["PyTorch", "UNet"],
     featured: false,
-    media: null,
-    links: [] // TODO: link the repo if you make it public
+    links: [{ label: "GitHub", href: "https://github.com/shivangi221b/diffusion-flow-matching" }]
   },
   {
     title: "Molecular ML with DeepChem",
     kicker: "EECS 6895 · Columbia",
-    blurb:
-      "Graph neural networks over molecular property prediction tasks with DeepChem, plus a close read of AlphaGenome.",
+    blurb: "Tox21 toxicity and HIV activity prediction with DeepChem, plus an AlphaGenome writeup. The notebook keeps every output plot intact.",
     tags: ["Research", "ML"],
-    stack: ["DeepChem", "GNNs"],
     featured: false,
-    media: null,
-    links: []
+    links: [{ label: "GitHub", href: "https://github.com/shivangi221b/molecular-ml-deepchem" }]
+  },
+  {
+    title: "xv6 Kernel Labs",
+    kicker: "Operating Systems · IIT Guwahati",
+    blurb: "Kernel work in C on xv6: scheduling, system calls and process management, built at the layer everything else sits on.",
+    tags: ["Systems"],
+    featured: false,
+    links: [{ label: "GitHub", href: "https://github.com/shivangi221b/xv6" }]
+  },
+  {
+    title: "TEDx IIT Guwahati portal",
+    kicker: "Django · 2021",
+    blurb: "The official web portal for TEDx IIT Guwahati, doubling as the talk scheduling and booking system for the campus's first virtual edition.",
+    tags: ["Web"],
+    featured: false,
+    links: [{ label: "GitHub", href: "https://github.com/shivangi221b/TEDxIITGuwahati" }]
+  },
+  {
+    title: "Habit Tracker",
+    kicker: "Weekend build",
+    blurb: "A single-page habit tracker that runs entirely in the browser. Tap days on a two-week calendar and it surfaces the habit that needs attention today.",
+    tags: ["Web"],
+    featured: false,
+    links: [{ label: "GitHub", href: "https://github.com/shivangi221b/habit-tracker" }]
   }
 ];
 
 /* ============================================================
-   TIMELINE
-   TODO: replace the 20XX placeholders with your real years.
+   SKILLS  (three scrolling rows; alternate directions)
+   ============================================================ */
+const CORE_SKILLS = [
+  "Python", "Java", "PyTorch", "Machine Learning", "LLMs & RAG",
+  "Computer Vision", "Distributed Systems", "SQL"
+];
+
+const SKILLS = [
+  ["Python", "Java", "C++", "C", "JavaScript", "TypeScript", "SQL", "Shell", "LaTeX"],
+  ["PyTorch", "TensorFlow", "Keras", "scikit-learn", "NumPy", "Pandas", "LangChain", "NVIDIA NeMo", "ESPnet", "Wav2Vec2", "LoRA", "CLIP", "YOLOv8", "Grad-CAM", "LIME", "DeepChem"],
+  ["Kafka", "Prometheus", "FastAPI", "Django", "ReactJS", "PostgreSQL", "Firebase", "Streamlit", "Ollama", "GCP", "AWS", "Git", "Linux"]
+];
+
+/* ============================================================
+   EXPERIENCE  (chronological, oldest first)
    ============================================================ */
 const TIMELINE = [
   {
-    period: "20XX &ndash; 20XX",
-    role: "B.Tech, Computer Science",
-    org: "Indian Institute of Technology Guwahati",
-    place: "Guwahati, India",
-    body:
-      "Where the whole thing started. Systems courses in C, an AI study group that met more reliably than most classes, and the TEDx chapter site that taught me shipping beats polishing."
-  },
-  {
-    period: "20XX &ndash; 20XX",
-    role: "Engineering Analyst &rarr; Associate",
-    org: "Goldman Sachs",
-    place: "Bengaluru, India",
-    body:
-      "Three-plus years building and running software in a regulated financial environment. I learned to think in failure modes first — what breaks, who notices, and how fast you can prove it's fixed. That instinct still shapes how I build ML systems."
-  },
-  {
-    period: "2025 &ndash; 2026",
-    role: "MS, Computer Science (AI/ML track)",
-    org: "Columbia University",
-    place: "New York, NY",
-    body:
-      "A deliberate pivot into machine learning. Coursework in deep learning, big data and AI, and computer vision; a TA role; a 4.0; and a research project on speech adaptation that turned into a paper. Graduating December 2026."
-  },
-  {
-    period: "Summer 2026",
-    role: "Software Development Engineer Intern",
+    period: "Jun – Aug 2026",
+    role: "Software Engineer Intern",
     org: "Amazon",
-    place: "Seattle, WA",
-    body:
-      "On the Subscribe &amp; Save customer experience team — production code, real customers, and a crash course in how a system that large actually holds together."
+    place: "Seattle",
+    body: "Shipped four features across the Subscribe &amp; Save customer experience, spanning discovery, ranking and checkout. Added an anti-clustering constraint to the widget ranker so recommendations stay varied, rebuilt the product carousel into a compact layout that puts more products on a mobile screen, extended the Discover page to support the one-now-more-later order type, and cut checkout latency by moving redirection logic upstream.",
+    chips: ["Recommendation ranking", "Backend services", "Latency optimisation", "A/B rollout"]
+  },
+  {
+    period: "Aug 2025 – Dec 2026",
+    role: "M.S. Computer Science, AI/ML",
+    org: "Columbia University",
+    place: "New York",
+    body: "GPA 4.0. NLP, generative AI, large-scale distributed systems and deep learning for computer vision, alongside speech adaptation research.",
+    chips: ["PyTorch", "NLP", "Generative AI", "Computer Vision", "Distributed Systems"]
+  },
+  {
+    period: "Jan – Aug 2025",
+    role: "Engineering Associate",
+    org: "Goldman Sachs",
+    place: "Bengaluru",
+    body: "Led the rebuild of client onboarding for the futures and options trading system, moving it from a monolith to a modular architecture. Led the order execution work that doubled the instruments the platform supports. Sole liaison with clients and stakeholders.",
+    chips: ["Java", "ReactJS", "System design", "Secure by design"]
+  },
+  {
+    period: "Jul 2022 – Jan 2025",
+    role: "Engineering Analyst",
+    org: "Goldman Sachs",
+    place: "Bengaluru",
+    body: "Shipped Project Shepherdess, a full-stack tool that automated access control across the firm's financial systems. Lead developer on Project Health+, the monitoring layer for critical financial infrastructure, on a Kafka and ReactJS telemetry stack.",
+    chips: ["Java", "ReactJS", "Kafka", "Real-time telemetry"]
+  },
+  {
+    period: "May – Jul 2021",
+    role: "Summer Analyst",
+    org: "Goldman Sachs",
+    place: "Bengaluru",
+    body: "Delivered a production-ready feature inside a large-scale financial platform, building backend services and API integrations with senior engineers. Earned a full-time return offer.",
+    chips: ["Java", "Kafka", "Prometheus", "API integration"]
+  },
+  {
+    period: "2018 – 2022",
+    role: "B.Tech Computer Science",
+    org: "IIT Guwahati",
+    place: "Guwahati",
+    body: "GPA 8.06/10. Algorithms, operating systems, networks, machine learning, computational geometry. Thesis on context-aware sarcasm detection.",
+    chips: ["C", "C++", "Machine Learning", "NLP", "Operating Systems"]
   }
 ];
 
 /* ============================================================
-   PAPERS / WRITING
+   LEADERSHIP, TEACHING, RECOGNITION
+   ============================================================ */
+const LEADERSHIP = [
+  {
+    role: "AI Education Development Assistant", org: "aiX Convergence Design Studio, Columbia", period: "Jan 2025 – May 2026",
+    body: "Worked with faculty to design and evaluate LLM-driven assignments and workflows inside epidemiology coursework, mapped the AI competencies domain experts actually need in AI-augmented research, and built reproducible open-access materials for responsible AI adoption in higher education."
+  },
+  {
+    role: "Mentor", org: "Goldman Sachs", period: "Jan – Aug 2025",
+    body: "Guided interns and new engineers through code reviews, design walkthroughs and debugging. Wrote the onboarding documentation and ran the sessions that went with it."
+  },
+  {
+    role: "Web Operations Head", org: "TEDx IIT Guwahati", period: "Aug 2020 – Jul 2021",
+    body: "Led the technical execution of the chapter's first fully virtual conference: the event site, registration workflows and live streaming infrastructure, coordinated with speakers, designers and operations."
+  },
+  {
+    role: "Samsung Fellowship", org: "Samsung Innovation Campus", period: "Award",
+    body: "Awarded for excellence in interdisciplinary research."
+  }
+];
+
+/* ============================================================
+   WRITING AND PAPERS
    ============================================================ */
 const PAPERS = [
   {
-    title: "ASR Fine-Tuning, Modules, and RL Adaptation",
-    venue: "Manuscript in preparation · 2026",
+    title: "Adaptive Self-Learning Agentic AI System: A Continuous Fine-Tuning Framework for Speech-to-Text Models",
+    venue: "Manuscript · Gautam Agarwal, Shivangi Kumar, Kavya Venkatesh · 2026",
     summary:
-      "A cross-framework empirical study of reward-augmented domain adaptation for speech recognition, comparing NVIDIA NeMo and ESPnet under identical data, metrics, and reward designs.",
+      "A closed-loop framework where runtime corrections populate training data and an adaptive scheduler triggers fine-tuning on performance trends and cost rather than a fixed interval. Word error rate drops from 20.44% to 17.25% on the Edinburgh noisy speech set, at 40 to 60% less retraining cost.",
     links: [
-      { label: "Code & experiments", href: "https://github.com/shivangi221b/ASR-Fine-Tuning-Modules-and-RL-Adaptation-Analysis" }
-      // TODO: { label: "PDF", href: "assets/docs/asr-paper.pdf" }
+      { label: "Google Scholar", href: "https://scholar.google.com/citations?user=40wdomcAAAAJ&hl=en" }
     ]
   },
   {
@@ -198,7 +247,7 @@ const PAPERS = [
     summary:
       "Four-page write-up of an agentic retrieval system that reasons jointly over nutritional records and images.",
     links: [
-      { label: "PDF", href: "assets/docs/nutrigraph-report.pdf" } // TODO: drop the PDF in
+      { label: "PDF", href: "assets/docs/nutrigraph-report.pdf" } // TODO: add the file
     ]
   }
 ];

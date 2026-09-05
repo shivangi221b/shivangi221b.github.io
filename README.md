@@ -105,24 +105,35 @@ GitHub creates a `CNAME` file in the repo when you do this. Leave it there.
 
 ## TODO before you go live
 
-- [ ] Replace the `20XX` placeholders in `data.js` → `TIMELINE` with real years
-- [ ] Drop `resume.pdf` into `assets/docs/` (the hero button links to it)
-- [ ] Add demo videos — see `assets/README.md`
-- [ ] Add the NutriGraph repo link and the ACM report PDF in `data.js`
-- [ ] Confirm your LinkedIn URL in `index.html` (currently `linkedin.com/in/shivangi9`)
-- [ ] Swap `assets/docs/nutrigraph-report.pdf` in or remove that link
-- [ ] Optional: add an `og-image.png` (1200×630) and point the `og:image` meta tag at it,
-      so links to your site preview nicely in Slack/LinkedIn
+- [ ] Add the NutriGraph repo link and its report PDF (`assets/docs/`), or drop that link from `data.js`
+- [ ] Optional: an `og-image.png` at 1200x630, referenced from an `og:image` meta tag, so links preview well in Slack and LinkedIn
+- [ ] Optional: project cards are text only right now. To show demos, give a project a `media` object in `data.js` and uncomment the one line in `card()` in `script.js`. `assets/img/RL Integration Architecture Diagram.png` is sitting there unused and would work as the image for the ASR project.
 
 ## Editing cheatsheet
 
-**Add a project** — append an object to `PROJECTS` in `data.js`. Set
-`featured: true` for a big card near the top, `false` for the compact grid
-below. Tags automatically become filter chips.
+**Add a project.** Append an object to `PROJECTS` in `data.js`. Set
+`featured: true` for a card in the main grid, `false` for the compact list
+below it. Tags become filter chips automatically. Every card carries a 16:9
+media slot; with `media: null` it shows a patterned tile until you add a demo.
 
-**Change the accent colour** — `styles.css`, line ~10: `--accent`. There's a
-matching value in the dark-theme block below it, and one in the favicon data
-URI in `index.html`.
+**Change the accent colour.** `styles.css`, near the top: `--accent`. There is
+a matching value in the dark-theme block below it, a `--node` RGB triple that
+drives the background graph, and one in the favicon data URI in `index.html`.
 
-**Reorder sections** — move the `<section>` blocks in `index.html`. The nav
-links are just anchors to their `id`s.
+**Reorder sections.** Move the `<section>` blocks in `index.html`. The nav
+links are anchors to their `id`s.
+
+**Edit the core skills.** `CORE_SKILLS` in `data.js` is the static, highlighted
+row recruiters see first.
+
+**Edit the skills marquee.** `SKILLS` in `data.js` is three arrays, one per
+scrolling row. Middle row scrolls the other way. Each row repeats itself until
+it is wider than the screen so the loop never shows a gap. Speeds are the
+`animation-duration` values on `.mtrack` in `styles.css`. Rows pause on hover
+and stop entirely for reduced-motion visitors.
+
+**Tune the background.** The graph constellation lives at the bottom of
+`script.js`. `LINK_DIST` controls how far apart two nodes can be and still
+draw an edge, `PULL_DIST` is the cursor's reach, and `density()` sets how many
+nodes there are. It turns itself off on touch devices, narrow screens, and for
+anyone with reduced motion enabled.
